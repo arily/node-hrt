@@ -7,6 +7,8 @@ class HighResolutionTimeoutWorker {
     }
 
     loop() {
+        // const now = process.hrtime()
+        // if (this.tasks[0].second > now[0] )
         const executingTasks = this.filterTasks()
         executingTasks.forEach(T => T.execute())
         // for (let i = 0; i < executingTasks.length; i++) {
@@ -17,12 +19,18 @@ class HighResolutionTimeoutWorker {
 
     filterTasks() {
         const now = process.hrtime()
-        const { execute, leftover } = this.tasks.reduce((acc, T) => {
-            if (T.second <= now[0] && T.ns <= now[1]) acc.execute.push(T)
-            else acc.leftover.push(T)
-            return acc
-        }, { execute: [], leftover: [] })
-        this.tasks = leftover
+        // const { execute, leftover } = this.tasks.reduce((acc, T) => {
+        //     if (T.second <= now[0] && T.ns <= now[1]) acc.execute.push(T)
+        //     else acc.leftover.push(T)
+        //     return acc
+        // }, { execute: [], leftover: [] })
+        // this.tasks = leftover
+        const execute = []
+        const _tasks = [...this.tasks]
+        for (const T of _tasks) {
+            if (T.second > now[0] || T.ns > now[1]) break
+            execute.push(this.tasks.shift())
+        }
         if (execute.length) this.taskLengthChanged()
         return execute
     }
@@ -37,8 +45,13 @@ class HighResolutionTimeoutWorker {
         this.onClearTask()
     }
 
+    sortTasks() {
+        this.tasks.sort((a, b) => (a.second * 1000 + a.ns / 1000000000) - (b.second * 1000 + b.ns / 1000000000))
+    }
+
     onAddTask() {
         this.taskLengthChanged()
+        this.sortTasks()
     }
 
     onClearTask() {
@@ -48,7 +61,7 @@ class HighResolutionTimeoutWorker {
     taskLengthChanged() {
         this.execute = this.tasks.length > 0
         if (!this.execute) this.clearLoopTask();
-        if (!this.next) this.loop()
+        if (!this.next) this.next = setImmediate(this.loop)
     }
 
     clearLoopTask() {
