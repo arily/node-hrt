@@ -1,3 +1,5 @@
+const os = require('os')
+os.setPriority(-20);
 class HighResolutionTimeoutWorker {
     constructor() {
         this.tasks = []
