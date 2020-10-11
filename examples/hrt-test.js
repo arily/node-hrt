@@ -13,8 +13,8 @@ tasks.map(to => {
         const ms = (delay[1] / 1000000) + delay[0] * 1000
         // console.log(ms, 'ms delay, should be', to)
         results.push({
-            desire: to,
-            real: ms
+            scheduled: to,
+            executed: ms
         })
     }, to)
     timeout.setArgs(timeout.now)
@@ -27,20 +27,14 @@ setHRT(() => {
         return total / grades.length;
     }
     const result = results.reduce((acc, result) => {
-        acc.desire.push(result.desire)
-        acc.real.push(result.real)
+        acc.scheduled.push(result.scheduled)
+        acc.executed.push(result.executed)
         return acc
     }, {
-        desire: [],
-        real: []
+        scheduled: [],
+        executed: []
     })
     console.log(result)
-    console.log('avg offset:', getAvg(result.real) - getAvg(result.desire), 'ms')
-    console.log('start from 2:', getAvg(result.real.slice(1)) - getAvg(result.desire.slice(1)), 'ms')
+    console.log('avg offset:', getAvg(result.executed) - getAvg(result.scheduled), 'ms')
+    console.log('last 50%:', getAvg(result.executed.slice(Math.floor(result.executed.length / 2))) - getAvg(result.scheduled.slice(Math.floor(result.scheduled.length / 2))), 'ms')
 }, 4001)
-
-setTimeout(() => {
-    setHRT(() => {
-        console.log('still executed')
-    }, 123)
-}, 5000);
