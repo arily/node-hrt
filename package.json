@@ -1,0 +1,25 @@
+{
+  "name": "node-hrt",
+  "version": "1.0.0",
+  "description": "high resolution timeout for node",
+  "main": "HighResolutionTimeout.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arily/node-hrt.git"
+  },
+  "keywords": [
+    "node",
+    "timeout",
+    "high",
+    "resoultion"
+  ],
+  "author": "arily",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/arily/node-hrt/issues"
+  },
+  "homepage": "https://github.com/arily/node-hrt#readme"
+}
