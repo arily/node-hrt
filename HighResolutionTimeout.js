@@ -1,4 +1,5 @@
 require('./highPriority')
+const TimSort = require('timsort')
 
 class HighResolutionTimeoutWorker {
     constructor() {
@@ -46,7 +47,8 @@ class HighResolutionTimeoutWorker {
     }
 
     sortTasks() {
-        this.tasks.sort((a, b) => (a.second * 1000 + a.ns / 1000000000) - (b.second * 1000 + b.ns / 1000000000))
+        // this.tasks.sort((a, b) => (a.second * 1000 + a.ns / 1000000000) - (b.second * 1000 + b.ns / 1000000000))
+        TimSort.sort(this.tasks, (a, b) => (a.second * 1000 + a.ns / 1000000000) - (b.second * 1000 + b.ns / 1000000000))
     }
 
     onAddTask() {

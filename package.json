@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/arily/node-hrt#readme",
   "dependencies": {
-    "is-elevated": "^3.0.0"
+    "is-elevated": "^3.0.0",
+    "timsort": "^0.3.0"
   }
 }
