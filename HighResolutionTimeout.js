@@ -6,11 +6,11 @@ class HighResolutionTimeoutWorker {
 
     loop() {
         const executingTasks = this.filterTasks()
-        // executingTasks.map(T => T.execute())
-        for (let i = 0; i < executingTasks.length; i++) {
-            executingTasks[i].execute()
-        }
-        if (this.execute) this.next = setImmediate(this.loop);
+        executingTasks.forEach(T => T.execute())
+        // for (let i = 0; i < executingTasks.length; i++) {
+        //     executingTasks[i].execute()
+        // }
+        if (this.execute) this.next = setImmediate(this.loop)
     }
 
     filterTasks() {
@@ -46,7 +46,7 @@ class HighResolutionTimeoutWorker {
     taskLengthChanged() {
         this.execute = this.tasks.length > 0
         if (!this.execute) this.clearLoopTask();
-        if (this.execute && !this.next) this.next = setImmediate(this.loop)
+        if (!this.next) this.loop()
     }
 
     clearLoopTask() {
